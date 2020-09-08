@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -69,10 +70,9 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    if (age in 5..20) return "$age лет" else return
-        when (age % 10) {
-            1 -> "$age год"
-            in 2..4 -> "$age года"
+    if (age % 100 in 5..20) return "$age лет" else return when {
+            age % 10 == 1 -> "$age год"
+            age % 10 in 2..4 -> "$age года"
             else -> "$age лет"
         }
 }
