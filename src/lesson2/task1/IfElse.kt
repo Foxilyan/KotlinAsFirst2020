@@ -5,6 +5,7 @@ package lesson2.task1
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
 import kotlin.math.max
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -88,7 +89,16 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2
+    val s1 = t1 * v1
+    val s2 = t2 * v2
+    return when {
+        halfWay >= s1 + s2 -> t1 + t2 + (halfWay - s1 - s2) / v3
+        halfWay >= s1 -> t1 + (halfWay - s1) / v2
+        else -> halfWay / v1
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -121,7 +131,9 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int = if (abs(kingX - bishopX) == abs(kingY - bishopY))
+    if (kingX == rookX || kingY == rookY) 3 else 2 else
+    if (kingX == rookX || kingY == rookY) 1 else 0
 
 /**
  * Простая (2 балла)
@@ -146,4 +158,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = when {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when{
+    a <= c && c <= b && b <= d -> b - c
+    c <= a && b <= d -> b - a
+    c <= a && a <= d && d <= b -> d - a
+    a <= c && d <= b -> d - c
+    else -> -1
+}
