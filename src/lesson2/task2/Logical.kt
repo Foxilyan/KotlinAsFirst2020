@@ -3,6 +3,8 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import java.lang.Integer.max
+import java.lang.Integer.min
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -49,13 +51,12 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    if (((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) && month == 2) return 29 else return when (month) {
+fun daysInMonth(month: Int, year: Int): Int =
+    if (((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) && month == 2) 29 else when (month) {
         1, 3, 5, 7, 8, 10, 12 -> 31
         2 -> 28
         else -> 30
     }
-}
 
 /**
  * Простая (2 балла)
@@ -78,7 +79,13 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
-    a <= r && (b <= s || c <= s) || a <= s && (b <= r || c <= r) ||
-            b <= r && (a <= s || c <= s) || b <= s && (a <= r || c <= r) ||
-            c <= r && (b <= s || a <= s) || c <= s && (b <= r || a <= r)
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val maxN = maxOf(a, b, c)
+    val minN = minOf(a, b, c)
+    val avN = when {
+        maxN > a && a > minN -> a
+        maxN > b && b > minN -> b
+        else -> c
+    }
+    return minN <= min(r, s) && avN <= max(r, s)
+}

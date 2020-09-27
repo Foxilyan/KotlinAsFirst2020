@@ -3,9 +3,9 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import lesson1.task1.sqr
 import kotlin.math.max
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -71,11 +71,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    if (age % 100 in 5..20) return "$age лет" else return when {
-            age % 10 == 1 -> "$age год"
-            age % 10 in 2..4 -> "$age года"
-            else -> "$age лет"
-        }
+    return if (age % 100 in 5..20) "$age лет" else when {
+        age % 10 == 1 -> "$age год"
+        age % 10 in 2..4 -> "$age года"
+        else -> "$age лет"
+    }
 }
 
 /**
@@ -113,9 +113,12 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = if (kingX == rookX1 || kingY == rookY1)
-    if (kingX == rookX2 || kingY == rookY2) 3 else 1 else
-        if (kingX == rookX2 || kingY == rookY2) 2 else 0
+): Int = when {
+    (rookX1 == kingX || rookY1 == kingY) && (rookX2 == kingX || rookY2 == kingY) -> 3
+    rookX1 == kingX || rookY1 == kingY -> 1
+    rookX2 == kingX || rookY2 == kingY -> 2
+    else -> 0
+}
 
 /**
  * Простая (2 балла)
@@ -143,11 +146,20 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = when {
-    a > b + c || b > a + c || c > a + b -> -1
-    sqr(a) == sqr(b) + sqr(c) || sqr(b) == sqr(a) + sqr(c) || sqr(c) == sqr(a) + sqr(b) -> 1
-    sqr(a) > sqr(b) + sqr(c) || sqr(b) > sqr(a) + sqr(c) || sqr(c) > sqr(a) + sqr(b) -> 2
-    else -> 0
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val maxN = maxOf(a, b, c)
+    val minN = minOf(a, b, c)
+    val avN = when {
+        maxN > a && a > minN -> a
+        maxN > b && b > minN -> b
+        else -> c
+    }
+    return when {
+        maxN > minN + avN -> -1
+        maxN.pow(2.0) == minN.pow(2.0) + avN.pow(2.0) -> 1
+        maxN.pow(2.0) < minN.pow(2.0) + avN.pow(2.0) -> 0
+        else -> 2
+    }
 }
 
 /**
@@ -158,10 +170,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = when {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when{
-    a <= c && c <= b && b <= d -> b - c
-    c <= a && b <= d -> b - a
-    c <= a && a <= d && d <= b -> d - a
-    a <= c && d <= b -> d - c
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    a in c..d && b in c..d -> b - a
+    c in a..b && d in a..b -> d - c
+    a !in c..d && b in c..d -> b - c
+    a in c..d && b !in c..d -> d - a
     else -> -1
 }
