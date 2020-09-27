@@ -80,11 +80,10 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val maxN = maxOf(a, b, c)
     val minN = minOf(a, b, c)
     val avN = when {
-        maxN > a && a > minN -> a
-        maxN > b && b > minN -> b
+        b in kotlin.math.min(a, c)..kotlin.math.max(a, c) -> b
+        a in kotlin.math.min(b, c)..kotlin.math.max(b, c) -> a
         else -> c
     }
     return minN <= min(r, s) && avN <= max(r, s)

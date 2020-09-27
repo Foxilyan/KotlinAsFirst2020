@@ -3,10 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import kotlin.math.max
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
 // Максимальное количество баллов = 6
@@ -150,8 +147,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val maxN = maxOf(a, b, c)
     val minN = minOf(a, b, c)
     val avN = when {
-        maxN > a && a > minN -> a
-        maxN > b && b > minN -> b
+        b in min(a, c)..max(a, c) -> b
+        a in min(b, c)..max(b, c) -> a
         else -> c
     }
     return when {
