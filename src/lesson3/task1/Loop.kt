@@ -2,10 +2,8 @@
 
 package lesson3.task1
 
-import kotlin.math.sqrt
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
+import lesson1.task1.sqr
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -76,7 +74,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var number = n
+    var number = abs(n)
     var ans = 1
     while (number > 9) {
         ans += 1
@@ -91,10 +89,14 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = when (n) {
-    1 -> 1
-    2 -> 1
-    else -> fib(n - 2) + fib(n - 1)
+fun fib(n: Int): Int {
+    var f1 = 1
+    var f2 = 1
+    for (i in 3..n) {
+        f2 += f1
+        f1 = f2 - f1
+    }
+    return f2
 }
 
 /**
@@ -103,7 +105,7 @@ fun fib(n: Int): Int = when (n) {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..n - 1) {
+    for (i in 2..sqr(n)) {
         if (n % i == 0) return i
     }
     return n
@@ -114,12 +116,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    for (i in n-1 downTo 2) {
-        if (n % i == 0) return i
-    }
-    return 1
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая (2 балла)
@@ -146,10 +143,13 @@ fun collatzSteps(x: Int): Int = TODO()
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    for (i in max(m, n)..n * m - 1) {
-        if (i % n == 0 && i % m == 0) return i
+    var m1 = m
+    var n1 = n
+    val x = n * m
+    while (n1 != 0 && m1 != 0) {
+        if (m1 > n1) m1 %= n1 else n1 %= m1
     }
-    return n * m
+    return x / (m1 + n1)
 }
 
 /**
@@ -160,7 +160,7 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    for (i in 2..min(m, n)) {
+    for (i in 2..sqr(min(m, n)) + 1) {
         if (m % i == 0 && n % i == 0) return false
     }
     return true
@@ -207,12 +207,7 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var n0 = n
-    var n1 = 0
-    while (n0 != 0) {
-        n1 = n1 * 10 + n0 % 10
-        n0 /= 10
-    }
+    val n1 = revert(n)
     return n == n1
 }
 
@@ -267,7 +262,16 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var l = 0
+    var x = 0
+    while (l < n) {
+        x++
+        l += (x * x).toString().length
+    }
+    val d = l - n + 1.0
+    return (x * x) / 10.0.pow(d - 1).toInt() % 10
+}
 
 /**
  * Сложная (5 баллов)
@@ -278,4 +282,15 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var i = 0
+    var l = 0
+    var x = 0
+    while (l < n) {
+        i++
+        x = fib(i)
+        l += x.toString().length
+    }
+    val d = l - n + 1.0
+    return x / 10.0.pow(d - 1).toInt() % 10
+}
