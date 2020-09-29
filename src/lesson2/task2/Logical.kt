@@ -3,10 +3,10 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
-import java.lang.Integer.max
-import java.lang.Integer.min
 import kotlin.math.abs
 import kotlin.math.sqrt
+import kotlin.math.min
+import kotlin.math.max
 
 /**
  * Пример
@@ -82,8 +82,8 @@ fun circleInside(
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val minN = minOf(a, b, c)
     val avN = when {
-        b in kotlin.math.min(a, c)..kotlin.math.max(a, c) -> b
-        a in kotlin.math.min(b, c)..kotlin.math.max(b, c) -> a
+        b in min(a, c)..max(a, c) -> b
+        a in min(b, c)..max(b, c) -> a
         else -> c
     }
     return minN <= min(r, s) && avN <= max(r, s)
