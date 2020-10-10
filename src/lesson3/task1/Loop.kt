@@ -290,7 +290,7 @@ fun fibSequenceDigit(n: Int): Int {
     while (l < n) {
         i++
         x = fib(i)
-        var x1 = x * x
+        var x1 = x
         while (x1 > 0) {
             l++
             x1 /= 10
