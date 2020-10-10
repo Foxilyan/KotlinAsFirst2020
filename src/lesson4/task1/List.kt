@@ -144,7 +144,7 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() /
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val s = list.sum() / list.size
+    val s = mean(list)
     for (i in 0 until list.size) {
         list[i] -= s
     }
@@ -160,7 +160,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  */
 fun times(a: List<Int>, b: List<Int>): Int {
     var c = 0
-    for (i in 0 until a.size) {
+    for (i in a.indices) {
         c += a[i] * b[i]
     }
     return c
@@ -176,7 +176,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
  */
 fun polynom(p: List<Int>, x: Int): Int {
     var ans = 0
-    for (i in 0 until p.size) {
+    for (i in p.indices) {
         ans += p[i] * x.toDouble().pow(i).toInt()
     }
     return ans

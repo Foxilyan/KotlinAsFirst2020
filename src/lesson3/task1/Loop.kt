@@ -105,7 +105,7 @@ fun fib(n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..sqr(n)) {
+    for (i in 2..sqrt(n.toDouble()).toInt()) {
         if (n % i == 0) return i
     }
     return n
@@ -160,7 +160,7 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    for (i in 2..sqr(min(m, n)) + 1) {
+    for (i in 2..min(m, n)) {
         if (m % i == 0 && n % i == 0) return false
     }
     return true
@@ -206,10 +206,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    val n1 = revert(n)
-    return n == n1
-}
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя (3 балла)
@@ -267,7 +264,11 @@ fun squareSequenceDigit(n: Int): Int {
     var x = 0
     while (l < n) {
         x++
-        l += (x * x).toString().length
+        var x1 = x * x
+        while (x1 > 0) {
+            l++
+            x1 /= 10
+        }
     }
     val d = l - n + 1.0
     return (x * x) / 10.0.pow(d - 1).toInt() % 10
@@ -289,7 +290,11 @@ fun fibSequenceDigit(n: Int): Int {
     while (l < n) {
         i++
         x = fib(i)
-        l += x.toString().length
+        var x1 = x * x
+        while (x1 > 0) {
+            l++
+            x1 /= 10
+        }
     }
     val d = l - n + 1.0
     return x / 10.0.pow(d - 1).toInt() % 10

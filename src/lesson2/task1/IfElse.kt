@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson2.task2.avg
 import kotlin.math.*
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -146,11 +147,7 @@ fun rookOrBishopThreatens(
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val maxN = maxOf(a, b, c)
     val minN = minOf(a, b, c)
-    val avN = when {
-        b in min(a, c)..max(a, c) -> b
-        a in min(b, c)..max(b, c) -> a
-        else -> c
-    }
+    val avN = avg(a, b, c)
     return when {
         maxN > minN + avN -> -1
         maxN.pow(2.0) == minN.pow(2.0) + avN.pow(2.0) -> 1

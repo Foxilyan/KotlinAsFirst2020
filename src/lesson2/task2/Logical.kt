@@ -79,12 +79,15 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
+
+fun avg(a: Double, b: Double, c: Double) = when {
+    b in min(a, c)..max(a, c) -> b
+    a in min(b, c)..max(b, c) -> a
+    else -> c
+}
+
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val minN = minOf(a, b, c)
-    val avN = when {
-        b in min(a, c)..max(a, c) -> b
-        a in min(b, c)..max(b, c) -> a
-        else -> c
-    }
+    val avN = avg(a.toDouble(), b.toDouble(), c.toDouble())
     return minN <= min(r, s) && avN <= max(r, s)
 }
