@@ -142,9 +142,9 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     a.toSet()
     b.toSet()
-    val ans = mutableListOf<String>()
+    val ans = mutableSetOf<String>()
     for (name in a) if (name in b) ans += name
-    return ans
+    return ans.toList()
 }
 
 /**
@@ -206,7 +206,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var ans = ""
     var ansPrice = -1.0
-    for ((key, value) in stuff) if (value.first == kind && (ansPrice == -1.0 || ansPrice > value.second)){
+    for ((key, value) in stuff) if (value.first == kind && (ansPrice == -1.0 || ansPrice > value.second)) {
         ans = key
         ansPrice = value.second
     }
@@ -239,7 +239,20 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val ans = mutableMapOf<String, Int>()
+    val list1 = list.toMutableList()
+    while (list1.isNotEmpty()) {
+        val elem = list1[0]
+        var count = 0
+        while (elem in list1) {
+            count++
+            list1.remove(elem)
+        }
+        if (count != 1) ans[elem] = count
+    }
+    return ans
+}
 
 /**
  * Средняя (3 балла)
