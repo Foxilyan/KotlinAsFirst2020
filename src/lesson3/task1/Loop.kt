@@ -136,21 +136,21 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  */
 fun collatzSteps(x: Int): Int = TODO()
 
+fun nod(m: Int, n: Int): Int {
+    var m1 = m
+    var n1 = n
+    while (n1 != 0 && m1 != 0) {
+        if (m1 > n1) m1 %= n1 else n1 %= m1
+    }
+    return n1 + m1
+}
 /**
  * Средняя (3 балла)
  *
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    var m1 = m
-    var n1 = n
-    val x = n * m
-    while (n1 != 0 && m1 != 0) {
-        if (m1 > n1) m1 %= n1 else n1 %= m1
-    }
-    return x / (m1 + n1)
-}
+fun lcm(m: Int, n: Int): Int = n * m / nod(n, m)
 
 /**
  * Средняя (3 балла)
@@ -160,7 +160,7 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    for (i in 2..min(m, n)) {
+    for (i in 2..nod(m, n)) {
         if (m % i == 0 && n % i == 0) return false
     }
     return true
@@ -175,7 +175,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     for (i in m..n) {
-        if (sqrt(i.toDouble()).toInt() * sqrt(i.toDouble()).toInt() == i) return true
+        if (sqrt(i.toDouble()) == floor(sqrt(i.toDouble()))) return true
     }
     return false
 }
@@ -250,6 +250,8 @@ fun sin(x: Double, eps: Double): Double = TODO()
  */
 fun cos(x: Double, eps: Double): Double = TODO()
 
+fun findDigit(x: Int, d: Double): Int = x / 10.0.pow(d - 1).toInt() % 10
+
 /**
  * Сложная (4 балла)
  *
@@ -271,7 +273,7 @@ fun squareSequenceDigit(n: Int): Int {
         }
     }
     val d = l - n + 1.0
-    return (x * x) / 10.0.pow(d - 1).toInt() % 10
+    return findDigit(x * x, d)
 }
 
 /**
@@ -297,5 +299,5 @@ fun fibSequenceDigit(n: Int): Int {
         }
     }
     val d = l - n + 1.0
-    return x / 10.0.pow(d - 1).toInt() % 10
+    return findDigit(x, d)
 }

@@ -211,7 +211,7 @@ fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
     var i = 2
     while (n1 != 1) {
-        if (n1 % i == 0 && isPrime(i)) {
+        if (n1 % i == 0) {
             while (n1 % i == 0) {
                 list += i
                 n1 /= i
@@ -231,13 +231,13 @@ fun factorize(n: Int): List<Int> {
  */
 fun factorizeToString(n: Int): String {
     val list = factorize(n)
-    var elem = list[0]
-    var ans = "$elem"
+    val ans = StringBuilder()
+    ans.append(list[0])
     for (i in 1 until list.size) {
-        elem = list[i]
-        ans += "*$elem"
+        val elem = list[i]
+        ans.append("*$elem")
     }
-    return ans
+    return ans.toString()
 }
 
 /**
@@ -271,16 +271,16 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
-    val abc = mutableListOf<Char>()
-    for (i in 'a'..'z') abc += i
-    var str = ""
+    val str = StringBuilder()
     for (i in list) {
-        str += if (i < 10) "$i" else {
-            val letter = abc[i - 10]
-            "$letter"
-        }
+        str.append(
+            if (i < 10) "$i" else {
+                val letter = 'a' + i - 10
+                "$letter"
+            }
+        )
     }
-    return str
+    return str.toString()
 }
 
 /**
