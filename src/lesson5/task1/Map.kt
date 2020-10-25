@@ -239,7 +239,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> {
+fun wordDecomposition(list: List<String>): MutableMap<String, Int> {
     val ans = mutableMapOf<String, Int>()
     val list1 = list.toMutableList()
     while (list1.isNotEmpty()) {
@@ -249,8 +249,16 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
             count++
             list1.remove(elem)
         }
-        if (count != 1) ans[elem] = count
+        ans[elem] = count
     }
+    return ans
+}
+
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val ans = wordDecomposition(list)
+    val toRemove = mutableListOf<String>()
+    for ((key, value) in ans) if (value == 1) toRemove.add(key)
+    for (key in toRemove) ans.remove(key)
     return ans
 }
 
@@ -321,7 +329,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var list1: List<Int>
+    for (i in list) {
+        list1 = list - i
+        if (number - i in list1) return Pair(list.indexOf(i), list.indexOf(number - i))
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -344,4 +359,5 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
+
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
