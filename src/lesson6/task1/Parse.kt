@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -86,7 +88,22 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val date = digital.split('.')
+    if (date.size != 3) return ""
+    for (elem in date) if (elem.contains(Regex("""[^\d]"""))) return ""
+    val day = date[0].toInt()
+    val month = date[1].toInt()
+    val year = date[2].toInt()
+    if (day < 1 || month < 1 || month > 12 || day > daysInMonth(month, year)) return ""
+    val monthToDigit = mapOf(
+        1 to "января", 2 to "февраля", 3 to "марта", 4 to "апреля",
+        5 to "мая", 6 to "июня", 7 to "июля", 8 to "августа",
+        9 to "сентября", 10 to "октября", 11 to "ноября", 12 to "декабря",
+    )
+    val monthDigit = monthToDigit[month]
+    return "$day $monthDigit $year"
+}
 
 /**
  * Средняя (4 балла)
@@ -114,7 +131,13 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if (jumps.contains(Regex("""[^\d\s-%]"""))) return -1
+    val jumpsList = jumps.split(' ')
+    var ans = -1
+    for (elem in jumpsList) if (elem != "-" && elem != "%" && elem.toInt() > ans) ans = elem.toInt()
+    return ans
+}
 
 /**
  * Сложная (6 баллов)
@@ -149,7 +172,15 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val strToList = str.split(' ')
+    var ans = 0
+    for (i in 0..strToList.size - 2) {
+        if (strToList[i].toLowerCase() == strToList[i + 1].toLowerCase()) return ans
+        ans += 1 + strToList[i].length
+    }
+    return -1
+}
 
 /**
  * Сложная (6 баллов)

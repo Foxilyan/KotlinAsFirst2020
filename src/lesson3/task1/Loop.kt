@@ -144,6 +144,7 @@ fun nod(m: Int, n: Int): Int {
     }
     return n1 + m1
 }
+
 /**
  * Средняя (3 балла)
  *
