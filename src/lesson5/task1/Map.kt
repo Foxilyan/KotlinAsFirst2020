@@ -221,10 +221,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    chars.toSet()
+    val chars1 = chars.toSet()
     val word1 = word.toLowerCase()
     var count = 0
-    for (letter in chars) count += word1.count { it == letter.toLowerCase() }
+    for (letter in chars1) count += word1.count { it == letter.toLowerCase() }
     if (count == word.length) return true
     return false
 }
@@ -320,13 +320,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var map2: Map<Int, Int>
     val map1 = mutableMapOf<Int, Int>()
-    for (i in list) map1[i] = number - i
-    for ((key, value) in map1) {
-        map2 = map1 - key
-        if (value in map2) return Pair(list.indexOf(key), list.indexOf(value))
-    }
+    for ((i,e) in list.withIndex()) if (map1[number - e] != null) {
+        return Pair(map1[number - e]!!, i)
+    } else map1[e] = i
     return Pair(-1, -1)
 }
 
