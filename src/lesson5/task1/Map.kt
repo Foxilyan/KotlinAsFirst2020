@@ -142,9 +142,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     a.toSet()
     b.toSet()
-    val ans = mutableSetOf<String>()
-    for (name in a) if (name in b) ans += name
-    return ans.toList()
+    return a.intersect(b).toList()
 }
 
 /**
@@ -204,13 +202,13 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var ans = ""
+    var ans: String? = null
     var ansPrice = -1.0
     for ((key, value) in stuff) if (value.first == kind && (ansPrice == -1.0 || ansPrice > value.second)) {
         ans = key
         ansPrice = value.second
     }
-    return if (ansPrice == -1.0) null else ans
+    return ans
 }
 
 /**
@@ -223,8 +221,12 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    for (letter in word) if (letter !in chars) return false
-    return true
+    chars.toSet()
+    val word1 = word.toLowerCase()
+    var count = 0
+    for (letter in chars) count += word1.count { it == letter.toLowerCase() }
+    if (count == word.length) return true
+    return false
 }
 
 /**
@@ -239,27 +241,15 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun wordDecomposition(list: List<String>): MutableMap<String, Int> {
-    val ans = mutableMapOf<String, Int>()
-    val list1 = list.toMutableList()
-    while (list1.isNotEmpty()) {
-        val elem = list1[0]
-        var count = 0
-        while (elem in list1) {
-            count++
-            list1.remove(elem)
-        }
-        ans[elem] = count
-    }
-    return ans
-}
-
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val ans = wordDecomposition(list)
-    val toRemove = mutableListOf<String>()
-    for ((key, value) in ans) if (value == 1) toRemove.add(key)
-    for (key in toRemove) ans.remove(key)
-    return ans
+    val set = list.toSet()
+    var count: Int
+    val map = mutableMapOf<String, Int>()
+    for (elem in set) {
+        count = list.count { it == elem }
+        if (count != 1) map[elem] = count
+    }
+    return map
 }
 
 /**
@@ -330,10 +320,12 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var list1: List<Int>
-    for (i in list) {
-        list1 = list - i
-        if (number - i in list1) return Pair(list.indexOf(i), list.indexOf(number - i))
+    var map2: Map<Int, Int>
+    val map1 = mutableMapOf<Int, Int>()
+    for (i in list) map1[i] = number - i
+    for ((key, value) in map1) {
+        map2 = map1 - key
+        if (value in map2) return Pair(list.indexOf(key), list.indexOf(value))
     }
     return Pair(-1, -1)
 }

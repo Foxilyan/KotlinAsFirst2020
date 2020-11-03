@@ -135,7 +135,10 @@ fun bestLongJump(jumps: String): Int {
     if (jumps.contains(Regex("""[^\d\s-%]"""))) return -1
     val jumpsList = jumps.split(' ')
     var ans = -1
-    for (elem in jumpsList) if (elem != "-" && elem != "%" && elem.toInt() > ans) ans = elem.toInt()
+    for (elem in jumpsList) if (elem !in setOf("-", "%")) when {
+        elem.toIntOrNull() == null -> return -1
+        elem.toInt() > ans -> ans = elem.toInt()
+    }
     return ans
 }
 
@@ -150,7 +153,17 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if (jumps.contains(Regex("""[^\d\s-+%]"""))) return -1
+    val jumpsList = jumps.split(' ')
+    var ans = -1
+    for (i in 0..jumpsList.size - 2 step 2) when {
+        jumpsList[i].contains(Regex("""\D""")) -> return -1
+        jumpsList[i + 1].contains(Regex("""\+$""")) && jumpsList[i].toInt() > ans -> ans =
+            jumpsList[i].toInt()
+    }
+    return ans
+}
 
 /**
  * Сложная (6 баллов)
