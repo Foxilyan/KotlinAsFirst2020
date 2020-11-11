@@ -156,12 +156,13 @@ fun bestLongJump(jumps: String): Int {
 fun bestHighJump(jumps: String): Int {
     if (jumps.contains(Regex("""[^\d\s-+%]"""))) return -1
     val jumpsList = jumps.split(' ')
+    if (jumpsList.size % 2 != 0) return -1
     var ans = -1
-    for (i in 0..jumpsList.size - 2 step 2) when {
+    for (i in 0..jumpsList.size - 2) if (i % 2 == 0) when {
         jumpsList[i].contains(Regex("""\D""")) -> return -1
         jumpsList[i + 1].contains(Regex("""\+$""")) && jumpsList[i].toInt() > ans -> ans =
             jumpsList[i].toInt()
-    }
+    } else if (jumpsList[i].contains(Regex("""\d"""))) return -1
     return ans
 }
 

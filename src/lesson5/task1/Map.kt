@@ -139,11 +139,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    a.toSet()
-    b.toSet()
-    return a.intersect(b).toList()
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
 
 /**
  * Средняя (3 балла)
@@ -203,11 +199,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var ans: String? = null
-    var ansPrice = -1.0
-    for ((key, value) in stuff) if (value.first == kind && (ansPrice == -1.0 || ansPrice > value.second)) {
-        ans = key
-        ansPrice = value.second
-    }
+    for ((key, value) in stuff) if (value.first == kind && (stuff[ans] == null || stuff[ans]!!.second > value.second)) ans =
+        key
     return ans
 }
 
@@ -221,8 +214,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val chars1 = chars.toMutableSet()
-    for (elem in chars1) chars1.add(elem.toLowerCase())
+    val chars1: Set<Char> = chars.joinToString().toLowerCase().toSet()
     val word1: Set<Char> = word.toLowerCase().toSet()
     return word1 == word1.intersect(chars1)
 }
@@ -240,14 +232,9 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val set = list.toSet()
-    var count: Int
-    val map = mutableMapOf<String, Int>()
-    for (elem in set) {
-        count = list.count { it == elem }
-        if (count != 1) map[elem] = count
-    }
-    return map
+    val set1 = list.toSet()
+    val ans = set1.groupBy({ it }, { list.count { word -> it == word } }).mapValues { it.value.first() }
+    return ans.filter { it.value != 1 }
 }
 
 /**
@@ -319,7 +306,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val map1 = mutableMapOf<Int, Int>()
-    for ((i,e) in list.withIndex()) if (map1[number - e] != null) {
+    for ((i, e) in list.withIndex()) if (map1[number - e] != null) {
         return Pair(map1[number - e]!!, i)
     } else map1[e] = i
     return Pair(-1, -1)

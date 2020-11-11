@@ -65,7 +65,12 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun deleteMarked(inputName: String, outputName: String) {
     File(outputName).bufferedWriter().use {
-        File(inputName).forEachLine { line -> if (line.isEmpty() || line[0] != '_') it.write(line + "\n") }
+        File(inputName).forEachLine { line ->
+            if (line.isEmpty() || line[0] != '_') {
+                it.write(line)
+                it.newLine()
+            }
+        }
     }
 }
 
@@ -237,13 +242,13 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     var maxLen = 0
     var len: Int
-    var set: Set<Char>
+    var set1: Set<Char>
     var words = mutableListOf<String>()
     File(outputName).bufferedWriter().use {
         File(inputName).forEachLine { line ->
             len = line.length
-            set = line.toLowerCase().toSet()
-            if (len == set.size) when {
+            set1 = line.toLowerCase().toSet()
+            if (len == set1.size) when {
                 len == maxLen -> words.add(line)
                 len > maxLen -> {
                     words = mutableListOf(line)
