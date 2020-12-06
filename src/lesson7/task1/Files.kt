@@ -3,7 +3,12 @@
 package lesson7.task1
 
 import java.io.File
+import java.lang.StringBuilder
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.max
 import kotlin.math.pow
+import kotlin.reflect.typeOf
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -151,7 +156,35 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    var maxLength = 0
+    var strLength: Int
+    var str: List<String>
+    var spaceNumber: Int
+    var spaces: Int
+    File(inputName).forEachLine { line ->
+        maxLength = max(maxLength, line.trim().split(Regex("\\s+")).joinToString(separator = " ").length)
+    }
+    File(outputName).bufferedWriter().use {
+        File(inputName).forEachLine { line ->
+            str = line.trim().split(Regex("\\s+"))
+            spaces = str.size - 1
+            strLength = str.joinToString(separator = " ").length
+            spaceNumber = maxLength - strLength + spaces
+            when {
+                str.size == 1 -> it.write(str[0])
+                str.size > 1 -> {
+                    for (i in 0..str.size - 2) {
+                        it.write(str[i])
+                        for (j in 1..ceil((spaceNumber.toDouble() / spaces.toDouble())).toInt()) it.write(" ")
+                        spaceNumber -= ceil((spaceNumber.toDouble() / spaces.toDouble())).toInt()
+                        spaces -= 1
+                    }
+                    it.write(str.last())
+                }
+            }
+            it.newLine()
+        }
+    }
 }
 
 /**
@@ -496,4 +529,3 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
 }
-
