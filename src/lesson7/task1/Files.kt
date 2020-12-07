@@ -3,12 +3,9 @@
 package lesson7.task1
 
 import java.io.File
-import java.lang.StringBuilder
 import kotlin.math.ceil
-import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.pow
-import kotlin.reflect.typeOf
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -339,7 +336,79 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val stack = ArrayDeque<Char>()
+    var tags: List<String>
+    val tagHTML = StringBuilder()
+    val tag = StringBuilder()
+    var str: List<String>
+
+    File(outputName).bufferedWriter().use {
+        it.write("<html>")
+        it.newLine()
+        it.write("<body>")
+        it.newLine()
+        it.write("<p>")
+        it.newLine()
+
+        File(inputName).forEachLine { line ->
+            if (line.isEmpty()) {
+                it.write("</p>")
+                it.newLine()
+                it.write("<p>")
+                it.newLine()
+            } else {
+                str = line.split(Regex("[*+~~]+"))
+                tags = line.split(Regex("[^*+~~]+")).filter { symbol -> symbol != "" }
+                for ((i, j) in tags.withIndex()) {
+                    tag.append(j)
+                    while (tag.isNotEmpty()) when {
+                        tag.startsWith("~~") -> {
+                            if (stack.lastOrNull() == 's') {
+                                stack.removeLast()
+                                tagHTML.append("</s>")
+                            } else {
+                                stack.addLast('s')
+                                tagHTML.append("<s>")
+                            }
+                            tag.deleteRange(0, 2)
+                        }
+                        tag.startsWith("**") -> {
+                            if (stack.lastOrNull() == 'b') {
+                                stack.removeLast()
+                                tagHTML.append("</b>")
+                            } else {
+                                stack.addLast('b')
+                                tagHTML.append("<b>")
+                            }
+                            tag.deleteRange(0, 2)
+                        }
+                        tag.startsWith("*") -> {
+                            if (stack.lastOrNull() == 'i') {
+                                stack.removeLast()
+                                tagHTML.append("</i>")
+                            } else {
+                                stack.addLast('i')
+                                tagHTML.append("<i>")
+                            }
+                            tag.deleteRange(0, 1)
+                        }
+                    }
+                    it.write(str[i])
+                    it.write(tagHTML.toString())
+                    tagHTML.clear()
+                }
+                it.write(str.last())
+                it.newLine()
+            }
+        }
+
+        it.write("</p>")
+        it.newLine()
+        it.write("</body>")
+        it.newLine()
+        it.write("</html>")
+        it.newLine()
+    }
 }
 
 /**
