@@ -342,7 +342,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val tagHTML = StringBuilder()
     val tag = StringBuilder()
     var str: List<String>
-    var lineWasEmpty = false
+    var lineWasEmpty = true
 
     File(outputName).bufferedWriter().use {
         it.write("<html>")
