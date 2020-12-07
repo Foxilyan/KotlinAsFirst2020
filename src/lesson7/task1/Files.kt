@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import lesson3.task1.digitNumber
 import java.io.File
 import kotlin.math.ceil
 import kotlin.math.max
@@ -341,6 +342,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val tagHTML = StringBuilder()
     val tag = StringBuilder()
     var str: List<String>
+    var lineWasEmpty = false
 
     File(outputName).bufferedWriter().use {
         it.write("<html>")
@@ -351,12 +353,14 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         it.newLine()
 
         File(inputName).forEachLine { line ->
-            if (line.isEmpty()) {
+            if (line.isEmpty() && !lineWasEmpty) {
                 it.write("</p>")
                 it.newLine()
                 it.write("<p>")
                 it.newLine()
-            } else {
+                lineWasEmpty = true
+            } else if (line.isNotEmpty()) {
+                lineWasEmpty = false
                 str = line.split(Regex("[*~]+"))
                 tags = line.split(Regex("[^*~]+")).filter { symbol -> symbol != "" }
                 for ((i, j) in tags.withIndex()) {
@@ -409,12 +413,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         it.write("</html>")
         it.newLine()
     }
-}
-
-fun main() {
-    val a = "a*a~~a***~ ~~***aaa~~aaa"
-    print(a.split(Regex("[^*~]+")).filter { symbol -> symbol != "" })
-    print(a.split(Regex("[*~]+")).filter { symbol -> symbol != "" })
 }
 /**
  * Сложная (23 балла)
@@ -555,8 +553,8 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    val l = rhv.toString().length
-    val stringLength = (lhv * rhv / 10.0.pow(l - 1)).toInt().toString().length + l
+    val l = digitNumber(rhv)
+    val stringLength = digitNumber((lhv * rhv / 10.0.pow(l - 1)).toInt()) + l
     var rhv1 = rhv
     File(outputName).bufferedWriter().use {
         it.write(String.format("%${stringLength}d", lhv))
