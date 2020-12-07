@@ -357,11 +357,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 it.write("<p>")
                 it.newLine()
             } else {
-                str = line.split(Regex("[*+~~]+"))
-                tags = line.split(Regex("[^*+~~]+")).filter { symbol -> symbol != "" }
+                str = line.split(Regex("[*~]+"))
+                tags = line.split(Regex("[^*~]+")).filter { symbol -> symbol != "" }
                 for ((i, j) in tags.withIndex()) {
                     tag.append(j)
-                    while (tag.isNotEmpty()) when {
+                    while (tag.startsWith("~~") || tag.startsWith("**") || tag.startsWith("*")) when {
                         tag.startsWith("~~") -> {
                             if (stack.lastOrNull() == 's') {
                                 stack.removeLast()
@@ -411,6 +411,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 }
 
+fun main() {
+    val a = "a*a~~a***~ ~~***aaa~~aaa"
+    print(a.split(Regex("[^*~]+")).filter { symbol -> symbol != "" })
+    print(a.split(Regex("[*~]+")).filter { symbol -> symbol != "" })
+}
 /**
  * Сложная (23 балла)
  *
