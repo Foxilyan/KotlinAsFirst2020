@@ -353,7 +353,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         it.newLine()
 
         File(inputName).forEachLine { line ->
-            if (line.isEmpty() && !lineWasEmpty) {
+            if (line.split(Regex("\\s+")).none { symbol -> symbol != "" } && !lineWasEmpty) {
                 it.write("</p>")
                 it.newLine()
                 it.write("<p>")
@@ -414,6 +414,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         it.newLine()
     }
 }
+
 /**
  * Сложная (23 балла)
  *
